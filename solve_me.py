@@ -26,6 +26,7 @@ class TasksCommand:
     def write_current(self):
         with open(self.TASKS_FILE, "w+") as f:
             f.truncate(0)
+            print(self.current_items,"writing")
             for key in sorted(self.current_items.keys()):
                 f.write(f"{key} {self.current_items[key]}\n")
 
@@ -63,15 +64,34 @@ $ python tasks.py report # Statistics"""
         )
 
     def add(self, args):
+        if int(args[0]) in self.current_items.keys():
+            args[0]=int(args[0])+1
+            
+        self.current_items[int(args[0])]=args[1]
+        print(f'Added task: "{args[1]}" with priority {args[0]}')
+        print(self.current_items,"added")
+        print(max(sorted(self.current_items.keys()))+1)
         pass
 
     def done(self, args):
+        if args in self.current_items:
+            self.completed_items.append(self.current_items[args[0]])
+            self.current_items.pop(args[0])
+            print("Marked item as done.")
+        else:
+            print(f"Error: no incomplete item with priority {args[0]} exists.")
         pass
 
     def delete(self, args):
+        print("Deleted item with priority "+args[0])
         pass
 
     def ls(self):
+        j=1
+        for i in self.current_items:
+            print(self.current_items)
+            print(f"{j}. {self.current_items[i]} [{i}]\n")
+            j+=1
         pass
 
     def report(self):
