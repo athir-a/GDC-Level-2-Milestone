@@ -64,15 +64,39 @@ $ python tasks.py report # Statistics"""
         )
 
     def add(self, args):
+        if int(args[0]) in self.current_items:
+            i=int(args[0])
+            temp1=self.current_items[i]
+            self.current_items[i]=args[1]
+            i+=1
+            max_priority = max(self.current_items)
+            while i<=max_priority+1:
+                if i in self.current_items:
+                    temp2=self.current_items[i]
+                    self.current_items[i]=temp1
+                    temp1=temp2
+                else:
+                    self.current_items[i]=temp1
+                    break              
+                i+=1
+        else:
+            self.current_items[int(args[0])]=args[1]
+        print(f"Added task: \"{args[1]}\" with priority {args[0]}")
+        print(self.current_items)
         pass
 
     def done(self, args):
         pass
 
     def delete(self, args):
+        print("Deleted item with priority "+args[0])
         pass
 
     def ls(self):
+        j=1
+        for i in sorted(self.current_items):
+            print(f"{j}. {self.current_items[i]} [{i}]\n")
+            j+=1
         pass
 
     def report(self):
